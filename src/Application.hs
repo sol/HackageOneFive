@@ -1,3 +1,4 @@
+{-# LANGUAGE TypeSynonymInstances, MultiParamTypeClasses #-}
 {-
 
 This module defines our application's monad and any application-specific

@@ -20,6 +20,7 @@ import           Snap.Types
 import           Text.Templating.Heist
 
 import           Application
+import           Package (package)
 
 
 ------------------------------------------------------------------------------
@@ -52,5 +53,6 @@ echo = do
 site :: Application ()
 site = route [ ("/",            index)
              , ("/echo/:stuff", echo)
+             , ("/package/:name", package)
              ]
        <|> fileServe "resources/static"
