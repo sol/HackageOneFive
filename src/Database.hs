@@ -1,4 +1,4 @@
-module Database (getDependencies, getAllPackages) where
+module Database (getDependencies, getAllPackages, getDependentPackages) where
 
 import           Control.Monad.Trans (MonadIO, liftIO)
 
@@ -10,6 +10,13 @@ import           Database.HDBC
 getDependencies :: (MonadIO m) => String -> m [String]
 getDependencies packageName = withDB $ \conn -> do
   r <- quickQuery' conn "SELECT dependency_name FROM package_dependency WHERE package_name = ? ORDER BY dependency_name" [toSql packageName]
+  return $ map (fromSql . head) r
+
+
+-- | List of all packages that depend on package with given name
+getDependentPackages :: (MonadIO m) => String -> m [String]
+getDependentPackages packageName = withDB $ \conn -> do
+  r <- quickQuery' conn "SELECT package_name FROM package_dependency WHERE dependency_name = ? ORDER BY dependency_name" [toSql packageName]
   return $ map (fromSql . head) r
 
 

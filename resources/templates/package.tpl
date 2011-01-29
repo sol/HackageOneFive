@@ -6,9 +6,7 @@
   </head>
   <body>
     <h1><name/></h1>
-    <p>
-        Dependencies:
-        <dependencies/>
-    </p>
+    <dependencies/>
+    <dependent-packages/>
   </body>
 </html>
