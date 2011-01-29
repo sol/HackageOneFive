@@ -5,21 +5,20 @@ import           Data.Maybe
 import           Control.Monad
 
 import           Control.Applicative ((<$>))
-import           Control.Monad.Trans (MonadIO, liftIO)
+import           Control.Monad.Trans (MonadIO)
 
 import           Snap.Types (getParam)
 import           Snap.Extension.Heist (heistLocal, render)
 import           Text.Templating.Heist (Splice, bindString, bindSplice)
 
 import           Data.ByteString.UTF8 (toString)
-import           Database.HDBC.PostgreSQL (withPostgreSQL)
-import           Database.HDBC
 import           Text.Blaze.Html5 (Html, (!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
 import           Text.Blaze.Renderer.Hexpat (renderHtml)
 
 import           Application
+import           Database
 
 
 -- | Handler for a package entry
@@ -50,17 +49,3 @@ packageList packages = renderHtml $ H.ul $ mapM_ (H.li . packageLink) packages
 -- | A hyperlink to package with given name
 packageLink :: String -> Html
 packageLink packageName = H.a ! A.href (H.stringValue $ "/package/" ++ packageName) $ H.string packageName
-
-
--- | List of dependencies for package with given name
-getDependencies :: (MonadIO m) => String -> m [String]
-getDependencies packageName = liftIO $ withPostgreSQL "dbname = hackage_one_five" $ \conn -> do
-  r <- quickQuery' conn "SELECT dependency_name FROM package_dependency WHERE package_name = ? ORDER BY dependency_name" [toSql packageName]
-  return $ map (fromSql . head) r
-
-
--- | List of dependencies for package with given name
-getAllPackages :: (MonadIO m) => m [String]
-getAllPackages = liftIO $ withPostgreSQL "dbname = hackage_one_five" $ \conn -> do
-  r <- quickQuery' conn "SELECT name FROM package ORDER BY name" []
-  return $ map (fromSql . head) r
