@@ -20,7 +20,7 @@ import           Snap.Types
 import           Text.Templating.Heist
 
 import           Application
-import           Package (package)
+import           Package (package, allPackagesSplice)
 
 
 ------------------------------------------------------------------------------
@@ -35,24 +35,14 @@ index = ifTop $ heistLocal (bindSplices indexSplices) $ render "index"
     indexSplices = 
         [ ("start-time",   startTimeSplice)
         , ("current-time", currentTimeSplice)
+        , ("all-packages", allPackagesSplice)
         ]
-
-
-------------------------------------------------------------------------------
--- | Renders the echo page.
-echo :: Application ()
-echo = do
-    message <- decodedParam "stuff"
-    heistLocal (bindString "message" message) $ render "echo"
-  where
-    decodedParam p = fromMaybe "" <$> getParam p
 
 
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
 site = route [ ("/",            index)
-             , ("/echo/:stuff", echo)
              , ("/package/:name", package)
              ]
        <|> fileServe "resources/static"

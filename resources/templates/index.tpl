@@ -6,17 +6,9 @@
   </head>
   <body>
     <div id="content">
-      <h1>It works!</h1>
+      <h1>Packages</h1>
       <p>
-        This is a simple demo page served using
-        <a href="http://snapframework.com/docs/tutorials/heist">Heist</a>
-        and the <a href="http://snapframework.com/">Snap</a> web framework.
-      </p>
-      <p>
-        Echo test:
-        <a href="/echo/cats">cats</a>
-        <a href="/echo/dogs">dogs</a>
-        <a href="/echo/fish">fish</a>
+        <all-packages/>
       </p>
       <table id="info">
         <tr>
