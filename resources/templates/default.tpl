@@ -3,6 +3,7 @@
   <head>
     <title>HackageOneFive: <page-title/></title>
     <link rel="stylesheet" type="text/css" href="/ocean.css"/>
+    <link rel="stylesheet" type="text/css" href="/custom.css"/>
   </head>
   <body>
     <div id="content">
