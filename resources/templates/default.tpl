@@ -12,6 +12,10 @@
     <div id="content">
       <content/>
     </div>
-
+    <div id="footer">
+      <p>
+        Page generated at: <current-time/>
+      </p>
+    </div>
   </body>
 </html>

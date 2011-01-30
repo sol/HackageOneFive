@@ -30,19 +30,25 @@ import           Package (package, allPackagesSplice)
 -- Otherwise, the way the route table is currently set up, this action
 -- would be given every request.
 index :: Application ()
-index = ifTop $ heistLocal (bindSplices indexSplices) $ render "index"
-  where
-    indexSplices = 
-        [ ("start-time",   startTimeSplice)
-        , ("current-time", currentTimeSplice)
-        , ("all-packages", allPackagesSplice)
-        ]
+index = ifTop $ render "index"
+
+
+routes =
+  [ ("/",              index)
+  , ("/package/:name", package)
+  ]
+
+splices =
+  [ ("start-time",   startTimeSplice)
+  , ("current-time", currentTimeSplice)
+  , ("all-packages", allPackagesSplice)
+  ]
 
 
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
-site = route [ ("/",            index)
-             , ("/package/:name", package)
-             ]
-       <|> fileServe "resources/static"
+site = route routes_ <|> fileServe "resources/static"
+  where
+    routes_ = map addSplices routes
+    addSplices (name, app) = (name, heistLocal (bindSplices splices) app)
