@@ -43,29 +43,34 @@ allPackagesSplice = (renderHtml. packageList) `liftM` getAllPackages
 dependenciesSplice :: (MonadIO m) => String -> Splice m
 dependenciesSplice packageName = do
   dependencies <- getDependencies packageName
-  return $ renderHtml $ H.p $ case dependencies of
-    [] -> do
-      H.strong $ H.string packageName
-      " has no dependencies."
-    _  -> do
-      "Dependencies:"
-      packageList dependencies
+  return $ renderHtml $ do
+    H.h2 ("Dependencies " >> listCountInBraces dependencies)
+    if null dependencies
+      then
+        H.p $ "Package " >> htmlPackageName packageName >> " has no dependencies."
+      else
+        packageList dependencies
 
 
 -- | Splice that shows all packages that depend on package with given name
 dependentPackagesSplice :: (MonadIO m) => String -> Splice m
 dependentPackagesSplice packageName = do
   dependentPackages <- getDependentPackages packageName
-  return $ renderHtml $ H.p $ case dependentPackages of
-    [] -> do
-      "No other packages depend on "
-      H.strong $ H.string packageName
-      "."
-    _  -> do
-      "Packages that depend on "
-      H.strong $ H.string packageName
-      ":"
-      packageList dependentPackages
+  return $ renderHtml $ do
+    H.h2 ("Dependent packages " >> listCountInBraces dependentPackages)
+    if null dependentPackages
+      then
+        H.p $ "No other packages depend on " >> htmlPackageName packageName >> "."
+      else
+        packageList dependentPackages
+
+
+listCountInBraces :: [a] -> Html
+listCountInBraces l = "(" >> H.string (show $ length l) >> ")"
+
+
+htmlPackageName :: String -> Html
+htmlPackageName packageName = H.strong $ H.string packageName
 
 
 -- | Create unorderd list from given list of packages
