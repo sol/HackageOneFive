@@ -36,7 +36,11 @@ package = do
 
 -- | Splice that shows a list of all packages
 allPackagesSplice :: (MonadIO m) => Splice m
-allPackagesSplice = (renderHtml. packageList) `liftM` getAllPackages
+allPackagesSplice = do
+  packages <- getAllPackages
+  return $ renderHtml $ do
+    H.h2 ("All packages " >> listCountInBraces packages)
+    packageList packages
 
 
 -- | Splice that shows dependencies for package with given name

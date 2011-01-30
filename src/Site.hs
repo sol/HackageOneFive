@@ -44,11 +44,13 @@ splices =
   , ("all-packages", allPackagesSplice)
   ]
 
+siteName = "HackageOneFive"
+
 
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
 site = route routes_ <|> fileServe "resources/static"
   where
-    routes_ = map addSplices routes
-    addSplices (name, app) = (name, heistLocal (bindSplices splices) app)
+    routes_ = map addSplicesAndNames routes
+    addSplicesAndNames (name, app) = (name, heistLocal (bindString "site-name" siteName . bindSplices splices) app)
