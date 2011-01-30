@@ -6,8 +6,12 @@
     <link rel="stylesheet" type="text/css" href="/custom.css"/>
   </head>
   <body>
+
+    <a href="/"><div id="package-header"><p class="caption">HackageOneFive</p></div></a>
+
     <div id="content">
       <content/>
     </div>
+
   </body>
 </html>
