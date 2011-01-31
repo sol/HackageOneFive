@@ -12,7 +12,6 @@ module Site
   ) where
 
 import           Control.Applicative
-import           Data.Maybe
 import           Snap.Extension.Heist
 import           Snap.Extension.Timer
 import           Snap.Util.FileServe
@@ -33,24 +32,27 @@ index :: Application ()
 index = ifTop $ render "index"
 
 
-routes =
-  [ ("/",              index)
-  , ("/package/:name", package)
-  ]
-
-splices =
-  [ ("start-time",   startTimeSplice)
-  , ("current-time", currentTimeSplice)
-  , ("all-packages", allPackagesSplice)
-  ]
-
-siteName = "HackageOneFive"
-
-
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
-site = route routes_ <|> fileServe "resources/static"
+site = app <|> fileServe "resources/static"
+
+
+-- | Main handler for dynamic content
+app :: Application ()
+app = heistLocal (bindStrings strings . bindSplices splices) $
+  route routes
   where
-    routes_ = map addSplicesAndNames routes
-    addSplicesAndNames (name, app) = (name, heistLocal (bindString "site-name" siteName . bindSplices splices) app)
+    routes =
+      [ ("/",              index)
+      , ("/package/:name", package)
+      ]
+
+    splices =
+      [ ("start-time",   startTimeSplice)
+      , ("current-time", currentTimeSplice)
+      , ("all-packages", allPackagesSplice)
+      ]
+
+    strings =
+      [ ("site-name", "HackageOneFive") ]

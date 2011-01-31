@@ -2,8 +2,6 @@
 module Package (package, allPackagesSplice) where
 
 import           Data.Maybe
-import           Control.Monad
-
 import           Control.Applicative ((<$>))
 import           Control.Monad.Trans (MonadIO)
 
