@@ -35,4 +35,4 @@ Install and run HackageOneFive
     HackageOneFive -p 8080
 
 
-Point your web browser to [http://0.0.0.0:8080/](http://0.0.0.0:8080/).
+Point your browser to [http://0.0.0.0:8080/](http://0.0.0.0:8080/).
