@@ -1,8 +1,15 @@
 Getting started
 ===============
 
-Make sure that PostgreSQL is properly installed on your system.
+Prerequisites
+-------------
 
+Make sure that [PostgreSQL](http://www.postgresql.org/) is properly installed
+on your system and that `~/.cabal/bin/` is on your path.
+
+
+Create a database
+-----------------
 Create a database user for your account (answer all questions with 'y'):
 
     sudo -u postgres createuser $USER
@@ -20,11 +27,12 @@ Get tarball of latest package descriptions and feed it into the database:
     runhaskell scripts/create_db.hs 00-index.tar.gz
 
 
-Install and run HackageOneFive:
+Install and run HackageOneFive
+------------------------------
 
     cabal install
     mkdir log
     HackageOneFive -p 8080
 
 
-Point your web browser at http://0.0.0.0:8080/.
+Point your web browser to [http://0.0.0.0:8080/](http://0.0.0.0:8080/).
