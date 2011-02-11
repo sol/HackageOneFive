@@ -10,14 +10,14 @@ import           Snap.Extension.Heist (heistLocal, render)
 import           Text.Templating.Heist (Splice, bindString, bindSplices)
 
 import           Data.ByteString.UTF8 (toString)
+import           Data.Text.Encoding (decodeUtf8)
 import           Text.Blaze.Html5 (Html, (!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import           Text.Blaze.Renderer.Hexpat (renderHtml)
+import           Text.Blaze.Renderer.XmlHtml (renderHtml_)
 
 import           Application
 import           Database
-
 
 -- | Handler for a package entry
 package :: Application ()
@@ -27,7 +27,7 @@ package = do
     let splices = [ ("dependencies", dependenciesSplice packageName_)
                   , ("dependent-packages", dependentPackagesSplice packageName_)
                   ]
-    heistLocal ((bindSplices splices) . bindString "name" packageName) $ render "package"
+    heistLocal ((bindSplices splices) . bindString "name" (decodeUtf8 packageName)) $ render "package"
   where
     decodedParam p = fromMaybe "" <$> getParam p
 
@@ -36,7 +36,7 @@ package = do
 allPackagesSplice :: (MonadIO m) => Splice m
 allPackagesSplice = do
   packages <- getAllPackages
-  return $ renderHtml $ do
+  return $ renderHtml_ $ do
     H.h2 ("All packages " >> listCountInBraces packages)
     packageList packages
 
@@ -45,7 +45,7 @@ allPackagesSplice = do
 dependenciesSplice :: (MonadIO m) => String -> Splice m
 dependenciesSplice packageName = do
   dependencies <- getDependencies packageName
-  return $ renderHtml $ do
+  return $ renderHtml_ $ do
     H.h2 ("Dependencies " >> listCountInBraces dependencies)
     if null dependencies
       then
@@ -58,7 +58,7 @@ dependenciesSplice packageName = do
 dependentPackagesSplice :: (MonadIO m) => String -> Splice m
 dependentPackagesSplice packageName = do
   dependentPackages <- getDependentPackages packageName
-  return $ renderHtml $ do
+  return $ renderHtml_ $ do
     H.h2 ("Dependent packages " >> listCountInBraces dependentPackages)
     if null dependentPackages
       then

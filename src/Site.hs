@@ -35,7 +35,7 @@ index = ifTop $ render "index"
 ------------------------------------------------------------------------------
 -- | The main entry point handler.
 site :: Application ()
-site = app <|> fileServe "resources/static"
+site = app <|> serveDirectory "resources/static"
 
 
 -- | Main handler for dynamic content
