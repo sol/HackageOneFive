@@ -19,7 +19,9 @@ import           Snap.Types
 import           Text.Templating.Heist
 
 import           Application
-import           Package (package, allPackagesSplice)
+import           Package (package)
+
+import qualified Package
 
 
 ------------------------------------------------------------------------------
@@ -48,10 +50,9 @@ app = heistLocal (bindStrings strings . bindSplices splices) $
       , ("/package/:name", package)
       ]
 
-    splices =
+    splices = Package.splices ++
       [ ("start-time",   startTimeSplice)
       , ("current-time", currentTimeSplice)
-      , ("all-packages", allPackagesSplice)
       ]
 
     strings =

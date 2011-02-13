@@ -4,6 +4,6 @@
   <p>
     Package <a class="external" href="http://hackage.haskell.org/package/$(name)"><name/></a> on Hackage.
   </p>
-  <dependencies/>
-  <dependent-packages/>
+  <dependencies><name/></dependencies>
+  <dependent-packages><name/></dependent-packages>
 </apply>
