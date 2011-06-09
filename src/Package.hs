@@ -14,7 +14,7 @@ import           Data.Text (Text)
 import           Text.Blaze.Html5 (Html, (!))
 import qualified Text.Blaze.Html5 as H
 import qualified Text.Blaze.Html5.Attributes as A
-import           Text.Blaze.Renderer.XmlHtml (renderHtml_)
+import           Text.Blaze.Renderer.XmlHtml (renderHtmlNodes)
 
 import           Application
 import           Database
@@ -40,7 +40,7 @@ splices =
 allPackagesSplice :: (MonadIO m) => Splice m
 allPackagesSplice = do
   packages <- getAllPackages
-  return $ renderHtml_ $ do
+  return $ renderHtmlNodes $ do
     H.h2 ("All packages " >> listCountInBraces packages)
     packageList packages
 
@@ -50,7 +50,7 @@ dependenciesSplice :: (MonadIO m) => Splice m
 dependenciesSplice = do
   packageName <- getParamNodeText
   dependencies <- getDependencies packageName
-  return $ renderHtml_ $ do
+  return $ renderHtmlNodes $ do
     H.h2 ("Dependencies " >> listCountInBraces dependencies)
     if null dependencies
       then
@@ -64,7 +64,7 @@ dependentPackagesSplice :: (MonadIO m) => Splice m
 dependentPackagesSplice = do
   packageName <- getParamNodeText
   dependentPackages <- getDependentPackages packageName
-  return $ renderHtml_ $ do
+  return $ renderHtmlNodes $ do
     H.h2 ("Dependent packages " >> listCountInBraces dependentPackages)
     if null dependentPackages
       then
